@@ -43,6 +43,7 @@
 
 import http.server
 import requests
+import os
 from urllib.parse import unquote, parse_qs
 
 memory = {}
@@ -50,6 +51,8 @@ memory = {}
 form = '''<!DOCTYPE html>
 <title>Bookmark Server</title>
 <form method="POST">
+    <p>Format is http://twitch.tv/ as an example</p>
+    <br>
     <label>Long URI:
         <input name="longuri">
     </label>
@@ -146,7 +149,9 @@ class Shortener(http.server.BaseHTTPRequestHandler):
             self.wfile.write(
                 "Could not fetch URI '{}' Try again!".format(longuri).encode())
 
+
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 8000))
     server_address = ('', 8000)
     httpd = http.server.HTTPServer(server_address, Shortener)
     httpd.serve_forever()
